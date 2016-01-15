@@ -13,7 +13,8 @@ RUN apt-get update && apt-get install -y \
     libssl-dev \
     libxml2-dev \
     libxslt1-dev \
-    libjpeg-dev
+    libjpeg-dev \
+    git
 
 # Add build scripts
 RUN mkdir /build
