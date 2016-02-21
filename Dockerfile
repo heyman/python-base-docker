@@ -31,7 +31,8 @@ RUN easy_install virtualenv
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Configure locale
-ENV LC_ALL C.UTF-8
+RUN locale-gen en_US en_US.UTF-8
+ENV LC_ALL en_US.utf-8
 
 # Add app files
 ONBUILD ADD . /home/app/app
