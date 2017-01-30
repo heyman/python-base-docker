@@ -1,20 +1,13 @@
-FROM ubuntu:14.04
+FROM buildpack-deps:xenial
 MAINTAINER Jonatan Heyman <http://heyman.info>
 
 # install apt packages
 RUN apt-get update && apt-get install -y \
+    sudo \
     python python2.7 python-dev python-setuptools \
-    libpq-dev \
     libmemcached-dev \
     ruby \
-    ruby-dev \
-    make \
-    libffi-dev \
-    libssl-dev \
-    libxml2-dev \
-    libxslt1-dev \
-    libjpeg-dev \
-    git
+    ruby-dev
 
 # Add build scripts
 RUN mkdir /build
