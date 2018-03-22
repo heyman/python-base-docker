@@ -1,7 +1,9 @@
 #!/bin/bash
 
+echo "Creating virtualenv for python binary: $PYTHON_BIN"
+
 # create our virtualenv
-virtualenv /home/app/venv
+virtualenv -p $PYTHON_BIN /home/app/venv
 
 # activate it
 source /home/app/venv/bin/activate

@@ -1,11 +1,14 @@
-FROM buildpack-deps:xenial
+FROM buildpack-deps:artful
 MAINTAINER Jonatan Heyman <http://heyman.info>
 
 # install apt packages
 RUN apt-get update && apt-get install -y \
     sudo \
+    locales \
     python python2.7 python-dev python-setuptools \
+    python3.6 python3.6-dev \
     libmemcached-dev \
+    libgdal-dev \
     ruby \
     ruby-dev
 
@@ -34,7 +37,9 @@ ONBUILD RUN mkdir -p /home/app/app
 ONBUILD COPY ./requirements.txt /home/app/app/requirements.txt
 
 # Create virtualenv
-ONBUILD RUN sudo -u app /build/virtualenv.sh
+
+ONBUILD ARG PYTHON_BIN=python
+ONBUILD RUN sudo -u app env PYTHON_BIN=${PYTHON_BIN} /build/virtualenv.sh
 
 # Add all app files
 ONBUILD COPY . /home/app/app
