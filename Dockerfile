@@ -1,16 +1,18 @@
-FROM buildpack-deps:18.04
-MAINTAINER Jonatan Heyman <http://heyman.info>
+FROM buildpack-deps:20.04
 
 # install apt packages
 RUN apt-get update && apt-get install -y \
     sudo \
     locales \
-    python python2.7 python-dev python-pip \
-    python3.6 python3.6-dev \
+    software-properties-common \
+    python3-pip \
     libmemcached-dev \
     libgdal-dev \
     ruby \
     ruby-dev
+
+# Python 3.9
+RUN add-apt-repository -y ppa:deadsnakes/ppa && apt-get update && apt-get install -y python3.9 python3.9-dev python3.9-lib2to3 python3.9-distutils
 
 # Add build scripts
 RUN mkdir /build
@@ -21,7 +23,7 @@ RUN chmod +x /build/*.sh
 RUN /build/create-user.sh
 
 # Install virtualenv
-RUN pip install virtualenv
+RUN pip3 install virtualenv
 
 # Clean up APT when done.
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -38,7 +40,7 @@ ONBUILD COPY ./requirements.txt /home/app/app/requirements.txt
 
 # Create virtualenv
 
-ONBUILD ARG PYTHON_BIN=python
+ONBUILD ARG PYTHON_BIN=python3.9
 #ONBUILD RUN sudo -u app env PYTHON_BIN=${PYTHON_BIN} /build/virtualenv.sh
 ONBUILD RUN env PYTHON_BIN=${PYTHON_BIN} /build/virtualenv.sh
 ONBUILD RUN chown -R app:app /home/app/venv
