@@ -1,4 +1,4 @@
-FROM buildpack-deps:20.04
+FROM buildpack-deps:18.04
 
 # install apt packages
 RUN apt-get update && apt-get install -y \
@@ -11,8 +11,8 @@ RUN apt-get update && apt-get install -y \
     ruby \
     ruby-dev
 
-# Python 3.9
-RUN add-apt-repository -y ppa:deadsnakes/ppa && apt-get update && apt-get install -y python3.9 python3.9-dev python3.9-lib2to3 python3.9-distutils
+# Python 3.10
+RUN add-apt-repository -y ppa:deadsnakes/ppa && apt-get update && apt-get install -y python3.10 python3.10-dev python3.10-lib2to3 python3.10-distutils
 
 # Add build scripts
 RUN mkdir /build
@@ -40,7 +40,7 @@ ONBUILD COPY ./requirements.txt /home/app/app/requirements.txt
 
 # Create virtualenv
 
-ONBUILD ARG PYTHON_BIN=python3.9
+ONBUILD ARG PYTHON_BIN=python3.10
 #ONBUILD RUN sudo -u app env PYTHON_BIN=${PYTHON_BIN} /build/virtualenv.sh
 ONBUILD RUN env PYTHON_BIN=${PYTHON_BIN} /build/virtualenv.sh
 ONBUILD RUN chown -R app:app /home/app/venv
