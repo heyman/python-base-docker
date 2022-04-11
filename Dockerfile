@@ -1,4 +1,4 @@
-FROM buildpack-deps:18.04
+FROM buildpack-deps:20.04
 
 # install apt packages
 RUN apt-get update && apt-get install -y \
@@ -9,7 +9,8 @@ RUN apt-get update && apt-get install -y \
     libmemcached-dev \
     libgdal-dev \
     ruby \
-    ruby-dev
+    ruby-dev \
+    rsync
 
 # Python 3.10
 RUN add-apt-repository -y ppa:deadsnakes/ppa && apt-get update && apt-get install -y python3.10 python3.10-dev python3.10-lib2to3 python3.10-distutils
