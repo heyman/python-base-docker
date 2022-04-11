@@ -46,9 +46,7 @@ ONBUILD COPY ./requirements.txt /home/app/app/requirements.txt
 # Create virtualenv
 
 ONBUILD ARG PYTHON_BIN=python3.10
-#ONBUILD RUN sudo -u app env PYTHON_BIN=${PYTHON_BIN} /build/virtualenv.sh
 ONBUILD RUN sudo -u app env PYTHON_BIN=${PYTHON_BIN} /build/virtualenv.sh
-#ONBUILD RUN chown -R app:app /home/app/venv
 
 # Add all app files
 ONBUILD COPY --chown=app:app . /home/app/app
