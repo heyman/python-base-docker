@@ -15,6 +15,10 @@ RUN apt-get update && apt-get install -y \
 # Python 3.10
 RUN add-apt-repository -y ppa:deadsnakes/ppa && apt-get update && apt-get install -y python3.10 python3.10-dev python3.10-lib2to3 python3.10-distutils
 
+# Node and NPM
+RUN apt-get install -y nodejs npm
+ENV NODE_PATH /usr/local/lib/node_modules
+
 # Add build scripts
 RUN mkdir /build
 ADD . /build
@@ -43,11 +47,13 @@ ONBUILD COPY ./requirements.txt /home/app/app/requirements.txt
 
 ONBUILD ARG PYTHON_BIN=python3.10
 #ONBUILD RUN sudo -u app env PYTHON_BIN=${PYTHON_BIN} /build/virtualenv.sh
-ONBUILD RUN env PYTHON_BIN=${PYTHON_BIN} /build/virtualenv.sh
+ONBUILD RUN sudo -u app env PYTHON_BIN=${PYTHON_BIN} /build/virtualenv.sh
+#ONBUILD RUN chown -R app:app /home/app/venv
 
 # Add all app files
-ONBUILD COPY . /home/app/app
-ONBUILD RUN chown -R app:app /home/app
+ONBUILD COPY --chown=app:app . /home/app/app
+# The --chown flag won't actually change the owner of the /home/app/app dir, just the contents
+ONBUILD RUN chown app:app /home/app/app
 
 # Make virtualenv python the default python
 ONBUILD ENV PATH /home/app/venv/bin:$PATH
