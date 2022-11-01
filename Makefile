@@ -1,2 +1,2 @@
 build:
-	docker build --no-cache -t heyman/python-base .
+	docker build --platform linux/amd64 --no-cache -t heyman/python-base .
