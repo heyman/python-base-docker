@@ -1,4 +1,4 @@
-FROM buildpack-deps:20.04
+FROM python:3.11-buster
 
 # install apt packages
 RUN apt-get update && apt-get install -y \
@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
     rsync
 
 # Python 3.10
-RUN add-apt-repository -y ppa:deadsnakes/ppa && apt-get update && apt-get install -y python3.10 python3.10-dev python3.10-lib2to3 python3.10-distutils
+#RUN add-apt-repository -y ppa:deadsnakes/ppa && apt-get update && apt-get install -y python3.10 python3.10-dev python3.10-lib2to3 python3.10-distutils
 
 # Node and NPM
 RUN apt-get install -y nodejs npm
@@ -34,9 +34,13 @@ RUN pip3 install virtualenv
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Configure locale
-RUN locale-gen en_US en_US.UTF-8
-ENV LC_ALL en_US.utf-8
+RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+    dpkg-reconfigure --frontend=noninteractive locales && \
+    update-locale LANG=en_US.UTF-8
+ENV LC_ALL en_US.UTF-8
 
+#RUN locale-gen en_US en_US.UTF-8
+#ENV LC_ALL en_US.UTF-8
 
 # Copy just requirements.txt (in order to avoid reinstalling python dependencies 
 # when no changes has been made to requirements.txt)
@@ -45,7 +49,7 @@ ONBUILD COPY ./requirements.txt /home/app/app/requirements.txt
 
 # Create virtualenv
 
-ONBUILD ARG PYTHON_BIN=python3.10
+ONBUILD ARG PYTHON_BIN=python3.11
 ONBUILD RUN sudo -u app env PYTHON_BIN=${PYTHON_BIN} /build/virtualenv.sh
 
 # Add all app files
