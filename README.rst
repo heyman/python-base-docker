@@ -16,5 +16,4 @@ When running the built child image
 
 * If anything is mounted in /app, whatever it is will replace /home/app/app (this allows 
   updating of the application code without having to rebuild, push & pull the whole image).
-* If /home/app/app/env.sh exists, it will be executed (can be used to set up application 
-  specific environment variables)
+
