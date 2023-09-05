@@ -52,6 +52,10 @@ ONBUILD COPY ./requirements.txt /home/app/app/requirements.txt
 ONBUILD ARG PYTHON_BIN=python3.11
 ONBUILD RUN sudo -u app env PYTHON_BIN=${PYTHON_BIN} /build/virtualenv.sh
 
+# If there is a package.json file, install node dependencies
+ONBUILD COPY package.json package-lock.jso[n] /home/app/app/
+ONBUILD RUN test -f /home/app/app/package.json && cd /home/app/app && npm install || true
+
 # Hook for installing stuff before all the app code is copied (which invalidates cache)
 ONBUILD COPY ./docker-onbuild.s[h] /home/app/app/docker-onbuild.sh
 ONBUILD RUN test -f /home/app/app/docker-onbuild.sh && chmod +x /home/app/app/docker-onbuild.sh && /home/app/app/docker-onbuild.sh || true
