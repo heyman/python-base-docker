@@ -1,4 +1,4 @@
-FROM python:3.11-buster
+FROM python:3.11-bookworm
 
 # install apt packages
 RUN apt-get update && apt-get install -y \
