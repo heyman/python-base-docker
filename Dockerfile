@@ -68,6 +68,9 @@ ONBUILD RUN chown app:app /home/app/app
 # Make virtualenv python the default python
 ONBUILD ENV PATH /home/app/venv/bin:$PATH
 
+# Make python run in unbuffered mode
+ONBUILD ENV PYTHONUNBUFFERED 1
+
 VOLUME ["/app"]
 WORKDIR /home/app/app
 ENTRYPOINT ["/build/entrypoint.sh"]
