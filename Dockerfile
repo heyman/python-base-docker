@@ -53,7 +53,7 @@ ONBUILD ARG PYTHON_BIN=python3.11
 ONBUILD RUN sudo -u app env PYTHON_BIN=${PYTHON_BIN} /build/virtualenv.sh
 
 # If there is a package.json file, install node dependencies in /home/app
-ONBUILD COPY package.json package-lock.jso[n] /home/app/
+ONBUILD COPY package.jso[n] package-lock.jso[n] /home/app/
 ONBUILD RUN test -f /home/app/package.json && cd /home/app && npm install || true
 
 # Hook for installing stuff before all the app code is copied (which invalidates cache)
