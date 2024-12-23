@@ -16,7 +16,12 @@ RUN apt-get update && apt-get install -y \
 #RUN add-apt-repository -y ppa:deadsnakes/ppa && apt-get update && apt-get install -y python3.10 python3.10-dev python3.10-lib2to3 python3.10-distutils
 
 # Node and NPM
-RUN apt-get install -y nodejs npm
+#RUN apt-get install -y nodejs npm
+RUN mkdir -p /etc/apt/keyrings && \
+    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
+    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_22.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
+    apt-get update && apt-get install -y nodejs
+
 ENV NODE_PATH /usr/local/lib/node_modules
 
 # Add build scripts
@@ -54,6 +59,7 @@ ONBUILD RUN sudo -u app env PYTHON_BIN=${PYTHON_BIN} /build/virtualenv.sh
 
 # If there is a package.json file, install node dependencies in /home/app
 ONBUILD COPY package.jso[n] package-lock.jso[n] /home/app/
+# TODO: if npm install fails, it will fail silently, this should be fixed
 ONBUILD RUN test -f /home/app/package.json && cd /home/app && npm install || true
 
 # Hook for installing stuff before all the app code is copied (which invalidates cache)
